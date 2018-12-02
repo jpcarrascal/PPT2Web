@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "PPT2Web";
+    int i = 1;
+    int j = 1;
+}
+
+<div id="canvas">
+    <div id="container">
+        <div id="deck" current-slide="1" total-slides="@ViewData["slideCount"]">
+
+            <div class="@ViewData["errorClass"]">ERROR: wrong or no deck specified!!!</div>
+
+            @foreach (var image in ViewData["images"] as List<string>)
+            {
+                if (i > 1)
+                {
+                    @:<div class="slide inactive" id="slide-@i">
+                    }
+                    else
+                    {
+                        @:<div class="slide active" id="slide-@i">
+                        }
+                        @:<img class="slide-img" src="@image" />
+                    @:</div>
+                    i++;
+                }
+
+        </div>
+
+        <div id="navigation">
+
+            <div class="nav">
+                <div id="prev" class="nav-button">
+                    <span class="nav-text"><span class="times">&times;</span><br />FIRST</span>
+                </div>
+            </div>
+
+            <div id="instructions">
+
+                @foreach (var note in ViewData["notes"] as List<string>)
+                {
+                    if (j > 1)
+                    {
+                        @:<div class="text inactive" id="text-@j">
+                        }
+                        else
+                        {
+                            @:<div class="text active" id="text-@j">
+                            }
+                            @:<span>@Html.Raw(note)</span>
+                        @:</div>
+                        j++;
+                    }
+
+            </div>
+
+            <div class="nav">
+                <div id="next" class="nav-button">
+                    <span class="nav-text">&#9654;<br />NEXT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
