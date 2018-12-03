@@ -40,9 +40,12 @@
             this.checkBox1 = this.Factory.CreateRibbonCheckBox();
             this.URLbox = this.Factory.CreateRibbonEditBox();
             this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.PPT2Web = this.Factory.CreateRibbonButton();
             this.CopyToClipboard = this.Factory.CreateRibbonButton();
             this.OpenInBrowser = this.Factory.CreateRibbonButton();
+            this.deleteWebDeck = this.Factory.CreateRibbonButton();
+            this.Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.SuspendLayout();
@@ -56,11 +59,14 @@
             // group1
             // 
             this.group1.Items.Add(this.checkBox1);
+            this.group1.Items.Add(this.URLbox);
             this.group1.Items.Add(this.PPT2Web);
             this.group1.Items.Add(this.separator1);
-            this.group1.Items.Add(this.URLbox);
             this.group1.Items.Add(this.CopyToClipboard);
             this.group1.Items.Add(this.OpenInBrowser);
+            this.group1.Items.Add(this.deleteWebDeck);
+            this.group1.Items.Add(this.separator2);
+            this.group1.Items.Add(this.Settings);
             this.group1.Label = "PPT to Web";
             this.group1.Name = "group1";
             // 
@@ -74,7 +80,7 @@
             // URLbox
             // 
             this.URLbox.Enabled = false;
-            this.URLbox.Label = "URL:";
+            this.URLbox.Label = "Loc:";
             this.URLbox.Name = "URLbox";
             this.URLbox.SizeString = "https://ppt2webfrontend";
             this.URLbox.Text = "<deck not exported>";
@@ -83,6 +89,10 @@
             // separator1
             // 
             this.separator1.Name = "separator1";
+            // 
+            // separator2
+            // 
+            this.separator2.Name = "separator2";
             // 
             // PPT2Web
             // 
@@ -108,11 +118,28 @@
             // 
             this.OpenInBrowser.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.OpenInBrowser.Enabled = false;
-            this.OpenInBrowser.Image = ((System.Drawing.Image)(resources.GetObject("OpenInBrowser.Image")));
+            this.OpenInBrowser.Image = global::PPT2WebVSTO.Properties.Resources.browser;
             this.OpenInBrowser.Label = "Open URL in browser";
             this.OpenInBrowser.Name = "OpenInBrowser";
             this.OpenInBrowser.ShowImage = true;
             this.OpenInBrowser.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenInBrowser_Click);
+            // 
+            // deleteWebDeck
+            // 
+            this.deleteWebDeck.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.deleteWebDeck.Image = global::PPT2WebVSTO.Properties.Resources.delete;
+            this.deleteWebDeck.Label = "Delete from Web";
+            this.deleteWebDeck.Name = "deleteWebDeck";
+            this.deleteWebDeck.ShowImage = true;
+            this.deleteWebDeck.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteWebDeck_Click);
+            // 
+            // Settings
+            // 
+            this.Settings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.Settings.Image = global::PPT2WebVSTO.Properties.Resources.settings;
+            this.Settings.Label = "Settings";
+            this.Settings.Name = "Settings";
+            this.Settings.ShowImage = true;
             // 
             // Ribbon1
             // 
@@ -138,6 +165,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton CopyToClipboard;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton OpenInBrowser;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteWebDeck;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton Settings;
     }
 
     partial class ThisRibbonCollection

@@ -20,9 +20,9 @@ namespace PPT2WebVSTO
     */
     public partial class Ribbon1
     {
+        private readonly string url = Properties.Settings.Default.uploadURL;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-
             var app = Globals.ThisAddIn.Application;
             app.AfterPresentationOpen += AfterPresentationOpenHandle;
             app.AfterNewPresentation += AfterPresentationOpenHandle;
@@ -34,9 +34,9 @@ namespace PPT2WebVSTO
         {
             PPT2Web.Enabled = true;
             Presentation pptPresentation = window.Presentation;
-            if (ReadDocumentProperty(pptPresentation, "PPT2Web URL") != null)
+            if (ReadDocumentProperty(pptPresentation, "PPT2Web dir") != null)
             {
-                URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web URL");
+                URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web dir");
                 URLbox.Enabled = true;
                 CopyToClipboard.Enabled = true;
                 OpenInBrowser.Enabled = true;
@@ -54,9 +54,9 @@ namespace PPT2WebVSTO
         private void AfterPresentationOpenHandle(Presentation pptPresentation)
         {
             PPT2Web.Enabled = true;
-            if (ReadDocumentProperty(pptPresentation, "PPT2Web URL") != null)
+            if (ReadDocumentProperty(pptPresentation, "PPT2Web dir") != null)
             {
-                URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web URL");
+                URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web dir");
                 URLbox.Enabled = true;
                 CopyToClipboard.Enabled = true;
                 OpenInBrowser.Enabled = true;
@@ -84,13 +84,13 @@ namespace PPT2WebVSTO
             try
             {
                 Presentation pptPresentation = Globals.ThisAddIn.GetActiveDeck();
-                string pptLocation = pptPresentation.FullName;
                 URLbox.Text = "";
                 URLbox.Enabled = false;
                 CopyToClipboard.Enabled = false;
                 OpenInBrowser.Enabled = false;
-                // Username for folder creation in server
-                //String userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                PPT2Web.Enabled = false;
+
+                string pptLocation = pptPresentation.FullName;
                 int numSlides = pptPresentation.Slides.Count;
                 Debug.Print("There are " + numSlides.ToString() + " slides, dude.");
                 // Create a temporary folder:
@@ -160,27 +160,11 @@ namespace PPT2WebVSTO
                 }
                 else
                     Debug.Print("xxx No savedDeckDir saved!!!");
-                if (ReadDocumentProperty(pptPresentation, "PPT2Web URL") != null)
-                {
-                    var tmpurl = ReadDocumentProperty(pptPresentation, "PPT2Web URL");
-                    Debug.Print("xxx I already have a URL: " + tmpurl);
-                }
-                else
-                    Debug.Print("xxx No deckURL saved!!!");
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                var uploadStatus = UploadZipAsync(zipFs, zipPath, savedDeckDir);
-                string deckURL = uploadStatus.Result.ToString();
-                URLbox.Text = deckURL;
-                URLbox.Enabled = true;
-                CopyToClipboard.Enabled = true;
-                OpenInBrowser.Enabled = true;
-                string [] tmp = deckURL.Split('/');
-                tmp = tmp[(tmp.Length - 1)].Split('=');
-                var deckDir = tmp[ (tmp.Length-1) ];
-                saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
-                saveDocumentProperty(pptPresentation, "PPT2Web dir", deckDir);
-                //var uploadStatus = this.TestAPIGet();
-                Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+                var uploadStatus = UploadZipAsync(zipFs, zipPath, savedDeckDir, pptPresentation);
+
+
+                ////////////////////////////// WAS HERE
 
                 // Delete temporary folder:
                 if (Directory.Exists(destinationPathTmp))
@@ -253,8 +237,8 @@ namespace PPT2WebVSTO
             return s;
         }
 
-        private string url = "https://ppt2webuploadservice.azurewebsites.net/api/zipupload/";
-        public async Task<string> UploadZipAsync(Stream zipFile, string fileName, string deckDir)
+
+        private async Task UploadZipAsync(Stream zipFile, string fileName, string deckDir, Presentation pptPresentation)
         {
             HttpContent fileStreamContent = new StreamContent(zipFile);
             fileStreamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data") { Name = "file", FileName = fileName };
@@ -273,11 +257,30 @@ namespace PPT2WebVSTO
                     try
                     {
                         HttpResponseMessage response = await client.PostAsync(url, formData);
-                        return await response.Content.ReadAsStringAsync();
+                        //return await response.Content.ReadAsStringAsync();
+
+
+
+                        // HERE
+                        string deckURL = await response.Content.ReadAsStringAsync(); //uploadStatus.Result.ToString();
+                        URLbox.Text = deckURL;
+                        URLbox.Enabled = true;
+                        CopyToClipboard.Enabled = true;
+                        OpenInBrowser.Enabled = true;
+                        PPT2Web.Enabled = true;
+                        string[] tmp = deckURL.Split('/');
+                        tmp = tmp[(tmp.Length - 1)].Split('=');
+                        var webDeckDir = tmp[(tmp.Length - 1)];
+                        saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
+                        saveDocumentProperty(pptPresentation, "PPT2Web dir", webDeckDir);
+                        Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+                        // TO HERE
+                        //return ("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+
                     }
                     catch (Exception ex)
                     {
-                        return "HOUSTONxxxxx: " + ex.ToString();
+                        //return "HOUSTONxxxxx: " + ex.ToString();
                     }
                 }
             }
@@ -335,6 +338,11 @@ namespace PPT2WebVSTO
                     MessageBox.Show(other.Message);
                 }
             }
+        }
+
+        private void deleteWebDeck_Click(object sender, RibbonControlEventArgs e)
+        {
+
         }
     }
 }

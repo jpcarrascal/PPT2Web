@@ -192,6 +192,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Ribbon1.resx">
       <DependentUpon>Ribbon1.cs</DependentUpon>
@@ -228,6 +229,7 @@
   <ItemGroup>
     <Content Include="icons\browser.png" />
     <Content Include="icons\clipboard.png" />
+    <Content Include="icons\delete.png" />
     <Content Include="icons\export.png" />
   </ItemGroup>
   <PropertyGroup>
