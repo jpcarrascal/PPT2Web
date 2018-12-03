@@ -39,12 +39,12 @@
             this.group1 = this.Factory.CreateRibbonGroup();
             this.checkBox1 = this.Factory.CreateRibbonCheckBox();
             this.URLbox = this.Factory.CreateRibbonEditBox();
-            this.separator1 = this.Factory.CreateRibbonSeparator();
-            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.PPT2Web = this.Factory.CreateRibbonButton();
+            this.deleteFromWeb = this.Factory.CreateRibbonButton();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.CopyToClipboard = this.Factory.CreateRibbonButton();
             this.OpenInBrowser = this.Factory.CreateRibbonButton();
-            this.deleteWebDeck = this.Factory.CreateRibbonButton();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -61,10 +61,10 @@
             this.group1.Items.Add(this.checkBox1);
             this.group1.Items.Add(this.URLbox);
             this.group1.Items.Add(this.PPT2Web);
+            this.group1.Items.Add(this.deleteFromWeb);
             this.group1.Items.Add(this.separator1);
             this.group1.Items.Add(this.CopyToClipboard);
             this.group1.Items.Add(this.OpenInBrowser);
-            this.group1.Items.Add(this.deleteWebDeck);
             this.group1.Items.Add(this.separator2);
             this.group1.Items.Add(this.Settings);
             this.group1.Label = "PPT to Web";
@@ -86,14 +86,6 @@
             this.URLbox.Text = "<deck not exported>";
             this.URLbox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.URLbox_TextChanged);
             // 
-            // separator1
-            // 
-            this.separator1.Name = "separator1";
-            // 
-            // separator2
-            // 
-            this.separator2.Name = "separator2";
-            // 
             // PPT2Web
             // 
             this.PPT2Web.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -103,6 +95,19 @@
             this.PPT2Web.Name = "PPT2Web";
             this.PPT2Web.ShowImage = true;
             this.PPT2Web.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Export2Web_Click);
+            // 
+            // deleteFromWeb
+            // 
+            this.deleteFromWeb.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.deleteFromWeb.Image = global::PPT2WebVSTO.Properties.Resources.delete;
+            this.deleteFromWeb.Label = "Delete from Web";
+            this.deleteFromWeb.Name = "deleteFromWeb";
+            this.deleteFromWeb.ShowImage = true;
+            this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteFromWeb_Click);
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
             // 
             // CopyToClipboard
             // 
@@ -124,14 +129,9 @@
             this.OpenInBrowser.ShowImage = true;
             this.OpenInBrowser.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenInBrowser_Click);
             // 
-            // deleteWebDeck
+            // separator2
             // 
-            this.deleteWebDeck.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.deleteWebDeck.Image = global::PPT2WebVSTO.Properties.Resources.delete;
-            this.deleteWebDeck.Label = "Delete from Web";
-            this.deleteWebDeck.Name = "deleteWebDeck";
-            this.deleteWebDeck.ShowImage = true;
-            this.deleteWebDeck.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteWebDeck_Click);
+            this.separator2.Name = "separator2";
             // 
             // Settings
             // 
@@ -140,6 +140,7 @@
             this.Settings.Label = "Settings";
             this.Settings.Name = "Settings";
             this.Settings.ShowImage = true;
+            this.Settings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Settings_Click);
             // 
             // Ribbon1
             // 
@@ -165,7 +166,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton CopyToClipboard;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton OpenInBrowser;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteWebDeck;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteFromWeb;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Settings;
     }

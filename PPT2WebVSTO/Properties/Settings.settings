@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PPT2WebVSTO.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="uploadURL" Type="System.String" Scope="Application">
+    <Setting Name="uploadURL" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://ppt2webuploadservice.azurewebsites.net/api/zipupload/</Value>
     </Setting>
   </Settings>

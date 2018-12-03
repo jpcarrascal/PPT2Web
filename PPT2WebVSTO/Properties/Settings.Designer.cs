@@ -23,12 +23,15 @@ namespace PPT2WebVSTO.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://ppt2webuploadservice.azurewebsites.net/api/zipupload/")]
         public string uploadURL {
             get {
                 return ((string)(this["uploadURL"]));
+            }
+            set {
+                this["uploadURL"] = value;
             }
         }
     }

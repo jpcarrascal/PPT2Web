@@ -21,6 +21,7 @@ namespace PPT2WebVSTO
     public partial class Ribbon1
     {
         private readonly string url = Properties.Settings.Default.uploadURL;
+        SettingsDialog settingsDialog = new SettingsDialog(Properties.Settings.Default.uploadURL);
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             var app = Globals.ThisAddIn.Application;
@@ -39,6 +40,7 @@ namespace PPT2WebVSTO
                 URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web dir");
                 URLbox.Enabled = true;
                 CopyToClipboard.Enabled = true;
+                deleteFromWeb.Enabled = true;
                 OpenInBrowser.Enabled = true;
             }
             else
@@ -46,6 +48,7 @@ namespace PPT2WebVSTO
                 URLbox.Text = "";
                 URLbox.Enabled = false;
                 CopyToClipboard.Enabled = false;
+                deleteFromWeb.Enabled = false;
                 OpenInBrowser.Enabled = false;
             }
 
@@ -59,6 +62,7 @@ namespace PPT2WebVSTO
                 URLbox.Text = ReadDocumentProperty(pptPresentation, "PPT2Web dir");
                 URLbox.Enabled = true;
                 CopyToClipboard.Enabled = true;
+                deleteFromWeb.Enabled = true;
                 OpenInBrowser.Enabled = true;
             }
             else
@@ -66,6 +70,7 @@ namespace PPT2WebVSTO
                 URLbox.Text = "";
                 URLbox.Enabled = false;
                 CopyToClipboard.Enabled = false;
+                deleteFromWeb.Enabled = false;
                 OpenInBrowser.Enabled = false;
             }
         }
@@ -75,6 +80,7 @@ namespace PPT2WebVSTO
             URLbox.Text = "";
             URLbox.Enabled = false;
             CopyToClipboard.Enabled = false;
+            deleteFromWeb.Enabled = false;
             OpenInBrowser.Enabled = false;
             PPT2Web.Enabled = false;
         }
@@ -87,6 +93,7 @@ namespace PPT2WebVSTO
                 URLbox.Text = "";
                 URLbox.Enabled = false;
                 CopyToClipboard.Enabled = false;
+                deleteFromWeb.Enabled = false;
                 OpenInBrowser.Enabled = false;
                 PPT2Web.Enabled = false;
 
@@ -257,15 +264,11 @@ namespace PPT2WebVSTO
                     try
                     {
                         HttpResponseMessage response = await client.PostAsync(url, formData);
-                        //return await response.Content.ReadAsStringAsync();
-
-
-
-                        // HERE
-                        string deckURL = await response.Content.ReadAsStringAsync(); //uploadStatus.Result.ToString();
+                        string deckURL = await response.Content.ReadAsStringAsync();
                         URLbox.Text = deckURL;
                         URLbox.Enabled = true;
                         CopyToClipboard.Enabled = true;
+                        deleteFromWeb.Enabled = true;
                         OpenInBrowser.Enabled = true;
                         PPT2Web.Enabled = true;
                         string[] tmp = deckURL.Split('/');
@@ -274,13 +277,10 @@ namespace PPT2WebVSTO
                         saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
                         saveDocumentProperty(pptPresentation, "PPT2Web dir", webDeckDir);
                         Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
-                        // TO HERE
-                        //return ("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
-
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        //return "HOUSTONxxxxx: " + ex.ToString();
+                        Debug.Print("xxxx Houston!!!" );
                     }
                 }
             }
@@ -340,9 +340,14 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void deleteWebDeck_Click(object sender, RibbonControlEventArgs e)
+        private void deleteFromWeb_Click(object sender, RibbonControlEventArgs e)
         {
 
+        }
+
+        private void Settings_Click(object sender, RibbonControlEventArgs e)
+        {
+            settingsDialog.ShowDialog();
         }
     }
 }
