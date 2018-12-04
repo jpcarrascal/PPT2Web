@@ -25,6 +25,8 @@ namespace PPT2WebUploadService.Controllers
         public /*async Task*/ ActionResult<string> Post([FromForm] FileInputModel formData)
         {
             var uploads = Path.Combine(env.ContentRootPath, "uploads");
+            var responseStatus = "ERROR";
+            var responseContent = "";
             try
             {
                 if (formData.file != null && formData.file.Length > 0)
@@ -35,7 +37,8 @@ namespace PPT2WebUploadService.Controllers
                     else
                         uniqueFileName = formData.deckDir + Path.GetExtension(formData.file.FileName);
                     var tempZipFilePath = Path.Combine(uploads, GetUniqueFileName(uniqueFileName));
-                    var extractPath = Path.Combine(uploads, Path.GetFileNameWithoutExtension(uniqueFileName));
+                    var deckDir = Path.GetFileNameWithoutExtension(uniqueFileName);
+                    var extractPath = Path.Combine(uploads, deckDir);
                     if (Directory.Exists(extractPath))
                         Directory.Delete(extractPath, true);
                     using (var fileStream = new FileStream(tempZipFilePath, FileMode.Create))
@@ -49,29 +52,34 @@ namespace PPT2WebUploadService.Controllers
                     }
                     catch (Exception e) {
                         Debug.Print("xxxx TempZIP: " + tempZipFilePath + " Extract to" + extractPath);
+                        responseStatus = "ERROR";
+                        responseContent = "Error extracting zip file in server!";
                     }
                     if (System.IO.File.Exists(tempZipFilePath))
                         System.IO.File.Delete(tempZipFilePath);
-                    var deckUrl = "";
-                    if (env.IsDevelopment())
-                        deckUrl = HttpContext.Request.Host.ToString() + "/uploads/" + Path.GetFileNameWithoutExtension(uniqueFileName);
-                    else
-                        deckUrl = "https://ppt2webfrontend.azurewebsites.net/?deck=" + Path.GetFileNameWithoutExtension(uniqueFileName);
-                    return deckUrl;
+                    responseStatus = "SUCCESS";
+                    responseContent = deckDir;
                 }
                 else
-                    return "ERROR1: no file especified!";
+                {
+                    responseStatus = "ERROR";
+                    responseContent = "No file specified!";
+                }
             }
             catch (Exception e)
             {
-                return "ERROR0: "+e.ToString();
+                responseStatus = "ERROR";
+                responseContent = "Some other error: " + e.ToString();
             }
+
+            return responseContent;
         }
 
         public class FileInputModel
         {
             public IFormFile file { get; set; }
             public string deckDir { get; set; }
+            public string command { get; set; }
         }
 
         private string GetUniqueFileName(string fileName)

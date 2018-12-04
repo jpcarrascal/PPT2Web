@@ -5,5 +5,8 @@
     <Setting Name="uploadURL" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://ppt2webuploadservice.azurewebsites.net/api/zipupload/</Value>
     </Setting>
+    <Setting Name="showURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://ppt2webfrontend.azurewebsites.net/?deck=</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

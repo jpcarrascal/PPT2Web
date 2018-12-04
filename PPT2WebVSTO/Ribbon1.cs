@@ -30,6 +30,8 @@ namespace PPT2WebVSTO
             app.AfterNewPresentation += AfterPresentationOpenHandle;
             app.PresentationBeforeClose += resetControls;
             app.WindowActivate += SwitchWindowsHandle;
+            // Need to detect "save as..."
+            //app.PresentationBeforeSave += clearSavedProperties;
         }
 
         private void SwitchWindowsHandle(Presentation pres, DocumentWindow window)
@@ -84,6 +86,17 @@ namespace PPT2WebVSTO
             deleteFromWeb.Enabled = false;
             OpenInBrowser.Enabled = false;
             PPT2Web.Enabled = false;
+        }
+
+        private void clearSavedProperties(Presentation pres,  ref bool cancel)
+        {
+            URLbox.Text = "";
+            URLbox.Enabled = false;
+            CopyToClipboard.Enabled = false;
+            deleteFromWeb.Enabled = false;
+            OpenInBrowser.Enabled = false;
+            PPT2Web.Enabled = true;
+            clearDocumentProperty(pres, "PPT2Web dir");
         }
 
         private void Publish2Web_Click(object sender, RibbonControlEventArgs e)
@@ -226,22 +239,18 @@ namespace PPT2WebVSTO
                     try
                     {
                         HttpResponseMessage response = await client.PostAsync(url, formData);
-                        string deckURL = await response.Content.ReadAsStringAsync();
-                        URLbox.Text = deckURL;
+                        string webDeckDir = await response.Content.ReadAsStringAsync();
+                        URLbox.Text = webDeckDir;
                         URLbox.Enabled = true;
                         CopyToClipboard.Enabled = true;
                         deleteFromWeb.Enabled = true;
                         OpenInBrowser.Enabled = true;
                         PPT2Web.Enabled = true;
                         Settings.Enabled = true;
-                        string[] tmp = deckURL.Split('/');
-                        tmp = tmp[(tmp.Length - 1)].Split('=');
-                        var webDeckDir = tmp[(tmp.Length - 1)];
                         try
                         {
-                            saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
                             saveDocumentProperty(pptPresentation, "PPT2Web dir", webDeckDir);
-                            Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+                            Debug.Print("xxxx The deckDir: " + webDeckDir);
                         }
                         catch (Exception e)
                         {
@@ -283,7 +292,6 @@ namespace PPT2WebVSTO
                         deleteFromWeb.Enabled = false;
                         OpenInBrowser.Enabled = false;
                         PPT2Web.Enabled = true;
-                        clearDocumentProperty(pptPresentation, "PPT2Web URL");
                         clearDocumentProperty(pptPresentation, "PPT2Web dir");
                     }
                 }
@@ -326,16 +334,18 @@ namespace PPT2WebVSTO
 
         private void CopyToClipboard_Click(object sender, RibbonControlEventArgs e)
         {
-            Clipboard.SetText(URLbox.Text);
+            string url = Properties.Settings.Default.showURL + URLbox.Text;
+            Clipboard.SetText(url);
         }
 
         private void OpenInBrowser_Click(object sender, RibbonControlEventArgs e)
         {
-            if (Uri.TryCreate(URLbox.Text, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            string url = Properties.Settings.Default.showURL + URLbox.Text;
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
             {
                 try
                 {
-                    Process.Start(URLbox.Text);
+                    Process.Start(url);
                 }
                 catch (System.ComponentModel.Win32Exception noBrowser)
                 {

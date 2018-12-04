@@ -34,5 +34,17 @@ namespace PPT2WebVSTO.Properties {
                 this["uploadURL"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://ppt2webfrontend.azurewebsites.net/?deck=")]
+        public string showURL {
+            get {
+                return ((string)(this["showURL"]));
+            }
+            set {
+                this["showURL"] = value;
+            }
+        }
     }
 }
