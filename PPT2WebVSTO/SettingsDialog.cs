@@ -15,6 +15,7 @@ namespace PPT2WebVSTO
         public SettingsDialog(string url)
         {
             InitializeComponent();
+            saveSettings.Enabled = false;
             serverURL.Text = url;
         }
 
@@ -52,7 +53,20 @@ namespace PPT2WebVSTO
 
         private void serverURL_TextChanged(object sender, EventArgs e)
         {
-            saveSettings.Enabled = true;
+            var uriName = serverURL.Text;
+            Uri uriResult;
+            bool isURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
+                            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            if (isURL)
+            {
+                wrongURL.Visible = false;
+                saveSettings.Enabled = true;
+            }
+            else
+            {
+                saveSettings.Enabled = false;
+                wrongURL.Visible = true;
+            }
         }
 
         private void wrongURL_Click(object sender, EventArgs e)

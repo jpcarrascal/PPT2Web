@@ -85,7 +85,7 @@ namespace PPT2WebVSTO
             PPT2Web.Enabled = false;
         }
 
-        private void Export2Web_Click(object sender, RibbonControlEventArgs e)
+        private void Publish2Web_Click(object sender, RibbonControlEventArgs e)
         {
             try
             {
@@ -340,7 +340,7 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void deleteFromWeb_Click(object sender, RibbonControlEventArgs e)
+        private void removeFromWeb_Click(object sender, RibbonControlEventArgs e)
         {
 
         }

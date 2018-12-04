@@ -39,12 +39,12 @@
             this.group1 = this.Factory.CreateRibbonGroup();
             this.checkBox1 = this.Factory.CreateRibbonCheckBox();
             this.URLbox = this.Factory.CreateRibbonEditBox();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.PPT2Web = this.Factory.CreateRibbonButton();
             this.deleteFromWeb = this.Factory.CreateRibbonButton();
-            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.CopyToClipboard = this.Factory.CreateRibbonButton();
             this.OpenInBrowser = this.Factory.CreateRibbonButton();
-            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -80,34 +80,38 @@
             // URLbox
             // 
             this.URLbox.Enabled = false;
-            this.URLbox.Label = "Loc:";
+            this.URLbox.Label = "URL:";
             this.URLbox.Name = "URLbox";
             this.URLbox.SizeString = "https://ppt2webfrontend";
             this.URLbox.Text = "<deck not exported>";
             this.URLbox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.URLbox_TextChanged);
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
+            // separator2
+            // 
+            this.separator2.Name = "separator2";
             // 
             // PPT2Web
             // 
             this.PPT2Web.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.PPT2Web.Enabled = false;
             this.PPT2Web.Image = ((System.Drawing.Image)(resources.GetObject("PPT2Web.Image")));
-            this.PPT2Web.Label = "Export to Web";
+            this.PPT2Web.Label = "Publish to Web";
             this.PPT2Web.Name = "PPT2Web";
             this.PPT2Web.ShowImage = true;
-            this.PPT2Web.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Export2Web_Click);
+            this.PPT2Web.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Publish2Web_Click);
             // 
             // deleteFromWeb
             // 
             this.deleteFromWeb.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.deleteFromWeb.Image = global::PPT2WebVSTO.Properties.Resources.delete;
-            this.deleteFromWeb.Label = "Delete from Web";
+            this.deleteFromWeb.Image = ((System.Drawing.Image)(resources.GetObject("deleteFromWeb.Image")));
+            this.deleteFromWeb.Label = "Remove from Web";
             this.deleteFromWeb.Name = "deleteFromWeb";
             this.deleteFromWeb.ShowImage = true;
-            this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteFromWeb_Click);
-            // 
-            // separator1
-            // 
-            this.separator1.Name = "separator1";
+            this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.removeFromWeb_Click);
             // 
             // CopyToClipboard
             // 
@@ -123,20 +127,16 @@
             // 
             this.OpenInBrowser.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.OpenInBrowser.Enabled = false;
-            this.OpenInBrowser.Image = global::PPT2WebVSTO.Properties.Resources.browser;
+            this.OpenInBrowser.Image = ((System.Drawing.Image)(resources.GetObject("OpenInBrowser.Image")));
             this.OpenInBrowser.Label = "Open URL in browser";
             this.OpenInBrowser.Name = "OpenInBrowser";
             this.OpenInBrowser.ShowImage = true;
             this.OpenInBrowser.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenInBrowser_Click);
             // 
-            // separator2
-            // 
-            this.separator2.Name = "separator2";
-            // 
             // Settings
             // 
             this.Settings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.Settings.Image = global::PPT2WebVSTO.Properties.Resources.settings;
+            this.Settings.Image = ((System.Drawing.Image)(resources.GetObject("Settings.Image")));
             this.Settings.Label = "Settings";
             this.Settings.Name = "Settings";
             this.Settings.ShowImage = true;
