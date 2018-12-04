@@ -111,7 +111,7 @@
             this.deleteFromWeb.Label = "Remove from Web";
             this.deleteFromWeb.Name = "deleteFromWeb";
             this.deleteFromWeb.ShowImage = true;
-            this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.removeFromWeb_Click);
+            this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.RemoveFromWeb_Click);
             // 
             // CopyToClipboard
             // 

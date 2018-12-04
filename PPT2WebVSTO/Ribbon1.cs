@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace PPT2WebVSTO
 {
@@ -96,7 +97,7 @@ namespace PPT2WebVSTO
                 deleteFromWeb.Enabled = false;
                 OpenInBrowser.Enabled = false;
                 PPT2Web.Enabled = false;
-
+                Settings.Enabled = false;
                 string pptLocation = pptPresentation.FullName;
                 int numSlides = pptPresentation.Slides.Count;
                 Debug.Print("There are " + numSlides.ToString() + " slides, dude.");
@@ -170,9 +171,6 @@ namespace PPT2WebVSTO
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 var uploadStatus = UploadZipAsync(zipFs, zipPath, savedDeckDir, pptPresentation);
 
-
-                ////////////////////////////// WAS HERE
-
                 // Delete temporary folder:
                 if (Directory.Exists(destinationPathTmp))
                 {
@@ -186,62 +184,20 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void saveDocumentProperty(Presentation pptPresentation, string prop, string value)
+        private void RemoveFromWeb_Click(object sender, RibbonControlEventArgs e)
         {
-            DocumentProperties properties;
-            properties = pptPresentation.CustomDocumentProperties;
-            if (ReadDocumentProperty(pptPresentation, prop) != null)
+            Presentation pptPresentation = Globals.ThisAddIn.GetActiveDeck();
+            if (ReadDocumentProperty(pptPresentation, "PPT2Web dir") != null)
             {
-                properties[prop].Delete();
+                string savedDeckDir = ReadDocumentProperty(pptPresentation, "PPT2Web dir");
+                Debug.Print("xxx I do have a deckdir: " + savedDeckDir);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                var uploadStatus = RemoveDeckAsync(savedDeckDir, pptPresentation);
             }
-            properties.Add(prop, false, MsoDocProperties.msoPropertyTypeString, value);
-        }
-
-        private void clearDocumentProperty(Presentation pptPresentation, string prop)
-        {
-            DocumentProperties properties;
-            properties = pptPresentation.CustomDocumentProperties;
-            if (ReadDocumentProperty(pptPresentation, prop) != null)
+            else
             {
-                properties[prop].Delete();
+                Debug.Print("No deckDir saved with the Powerpoint document!!!");
             }
-        }
-
-        private string ReadDocumentProperty(Presentation pptPresentation, string propertyName)
-        {
-            DocumentProperties properties;
-            properties = pptPresentation.CustomDocumentProperties;
-            foreach (DocumentProperty prop in properties)
-            {
-                if (prop.Name == propertyName)
-                {
-                    return prop.Value.ToString();
-                }
-            }
-            return null;
-        }
-
-        private string ReplaceWordChars(string text)
-        {
-            var s = text;
-            // smart single quotes and apostrophe
-            s = Regex.Replace(s, "[\u2018\u2019\u201A]", "'");
-            // smart double quotes
-            s = Regex.Replace(s, "[\u201C\u201D\u201E]", "\"");
-            // ellipsis
-            s = Regex.Replace(s, "\u2026", "...");
-            // dashes
-            s = Regex.Replace(s, "[\u2013\u2014]", "-");
-            // circumflex
-            s = Regex.Replace(s, "\u02C6", "^");
-            // open angle bracket
-            s = Regex.Replace(s, "\u2039", "<");
-            // close angle bracket
-            s = Regex.Replace(s, "\u203A", ">");
-            // spaces
-            s = Regex.Replace(s, "[\u02DC\u00A0]", " ");
-
-            return s;
         }
 
 
@@ -257,10 +213,16 @@ namespace PPT2WebVSTO
                 using (var formData = new MultipartFormDataContent())
                 {
                     formData.Add(fileStreamContent);
-                    if(deckDir == "" || deckDir == null)
+                    if (deckDir == "" || deckDir == null)
+                    {
+                        formData.Add(new StringContent("create"), "command");
                         formData.Add(new StringContent("none"), "deckDir");
+                    }
                     else
+                    {
+                        formData.Add(new StringContent("update"), "command");
                         formData.Add(new StringContent(deckDir), "deckDir");
+                    }
                     try
                     {
                         HttpResponseMessage response = await client.PostAsync(url, formData);
@@ -271,18 +233,65 @@ namespace PPT2WebVSTO
                         deleteFromWeb.Enabled = true;
                         OpenInBrowser.Enabled = true;
                         PPT2Web.Enabled = true;
+                        Settings.Enabled = true;
                         string[] tmp = deckURL.Split('/');
                         tmp = tmp[(tmp.Length - 1)].Split('=');
                         var webDeckDir = tmp[(tmp.Length - 1)];
-                        saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
-                        saveDocumentProperty(pptPresentation, "PPT2Web dir", webDeckDir);
-                        Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+                        try
+                        {
+                            saveDocumentProperty(pptPresentation, "PPT2Web URL", deckURL);
+                            saveDocumentProperty(pptPresentation, "PPT2Web dir", webDeckDir);
+                            Debug.Print("xxxx The deckDir: " + deckDir + " the URL: " + deckURL);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Print("WARNING: CANNOT SAVE PROPERTIES!!!" + e.ToString());
+                        }
+                        if (File.Exists(fileName))
+                        {
+                            Debug.Print("Deleting temporary file...");
+                            FileInfo zipInfo = new FileInfo(fileName);
+                            zipInfo.Delete();
+                        }
                     }
                     catch (Exception e)
                     {
-                        Debug.Print("xxxx Houston!!!" );
+                        Debug.Print("xxxx Houston!!!" + e.ToString() );
                     }
                 }
+            }
+        }
+
+        private async Task RemoveDeckAsync(string deckDir, Presentation pptPresentation)
+        {
+            using (var client = new HttpClient())
+            {
+                var formData = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("command", "delete"),
+                    new KeyValuePair<string, string>("deckDir", deckDir)
+                });
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsync(url, formData);
+                    string deckURL = await response.Content.ReadAsStringAsync();
+                    if(false) //success
+                    {
+                        URLbox.Text = "";
+                        URLbox.Enabled = false;
+                        CopyToClipboard.Enabled = false;
+                        deleteFromWeb.Enabled = false;
+                        OpenInBrowser.Enabled = false;
+                        PPT2Web.Enabled = true;
+                        clearDocumentProperty(pptPresentation, "PPT2Web URL");
+                        clearDocumentProperty(pptPresentation, "PPT2Web dir");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Print("xxxx Houston!!!");
+                }
+
             }
         }
 
@@ -340,14 +349,61 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void removeFromWeb_Click(object sender, RibbonControlEventArgs e)
-        {
-
-        }
-
         private void Settings_Click(object sender, RibbonControlEventArgs e)
         {
             settingsDialog.ShowDialog();
+        }
+
+        private void saveDocumentProperty(Presentation pptPresentation, string prop, string value)
+        {
+            if (ReadDocumentProperty(pptPresentation, prop) != null)
+            {
+                pptPresentation.CustomDocumentProperties[prop].Delete();
+            }
+            pptPresentation.CustomDocumentProperties.Add(prop, false, MsoDocProperties.msoPropertyTypeString, value);
+        }
+
+        private void clearDocumentProperty(Presentation pptPresentation, string prop)
+        {
+            if (ReadDocumentProperty(pptPresentation, prop) != null)
+            {
+                pptPresentation.CustomDocumentProperties[prop].Delete();
+            }
+        }
+
+        private string ReadDocumentProperty(Presentation pptPresentation, string propertyName)
+        {
+            try
+            {
+                return pptPresentation.CustomDocumentProperties[propertyName].Value.ToString();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        private string ReplaceWordChars(string text)
+        {
+            var s = text;
+            // smart single quotes and apostrophe
+            s = Regex.Replace(s, "[\u2018\u2019\u201A]", "'");
+            // smart double quotes
+            s = Regex.Replace(s, "[\u201C\u201D\u201E]", "\"");
+            // ellipsis
+            s = Regex.Replace(s, "\u2026", "...");
+            // dashes
+            s = Regex.Replace(s, "[\u2013\u2014]", "-");
+            // circumflex
+            s = Regex.Replace(s, "\u02C6", "^");
+            // open angle bracket
+            s = Regex.Replace(s, "\u2039", "<");
+            // close angle bracket
+            s = Regex.Replace(s, "\u203A", ">");
+            // spaces
+            s = Regex.Replace(s, "[\u02DC\u00A0]", " ");
+
+            return s;
         }
     }
 }
