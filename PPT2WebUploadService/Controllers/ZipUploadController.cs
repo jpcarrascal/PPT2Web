@@ -7,6 +7,7 @@ using System.IO;
 //using System.Threading.Tasks;
 using System.IO.Compression;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace PPT2WebUploadService.Controllers
 {
@@ -25,7 +26,7 @@ namespace PPT2WebUploadService.Controllers
         public /*async Task*/ ActionResult<string> Post([FromForm] FileInputModel formData)
         {
             var uploads = Path.Combine(env.ContentRootPath, "uploads");
-            var responseStatus = "ERROR";
+            var responseStatus = "error";
             var responseContent = "";
             try
             {
@@ -51,28 +52,30 @@ namespace PPT2WebUploadService.Controllers
                         ZipFile.ExtractToDirectory(tempZipFilePath, extractPath);
                     }
                     catch (Exception e) {
-                        Debug.Print("xxxx TempZIP: " + tempZipFilePath + " Extract to" + extractPath);
-                        responseStatus = "ERROR";
+                        responseStatus = "error";
                         responseContent = "Error extracting zip file in server!";
                     }
                     if (System.IO.File.Exists(tempZipFilePath))
                         System.IO.File.Delete(tempZipFilePath);
-                    responseStatus = "SUCCESS";
+                    responseStatus = "success";
                     responseContent = deckDir;
                 }
                 else
                 {
-                    responseStatus = "ERROR";
+                    responseStatus = "error";
                     responseContent = "No file specified!";
                 }
             }
             catch (Exception e)
             {
-                responseStatus = "ERROR";
+                responseStatus = "error";
                 responseContent = "Some other error: " + e.ToString();
             }
-
-            return responseContent;
+            ResponseModel response = new ResponseModel();
+            response.status = responseStatus;
+            response.content = responseContent;
+            var responseJson = JsonConvert.SerializeObject(response);
+            return responseJson;
         }
 
         public class FileInputModel
@@ -80,6 +83,12 @@ namespace PPT2WebUploadService.Controllers
             public IFormFile file { get; set; }
             public string deckDir { get; set; }
             public string command { get; set; }
+        }
+
+        public class ResponseModel
+        {
+            public string status { get; set; }
+            public string content { get; set; }
         }
 
         private string GetUniqueFileName(string fileName)
@@ -95,7 +104,11 @@ namespace PPT2WebUploadService.Controllers
         public ActionResult<string> Get(int id)
         {
             //return "Path: " + Path.Combine(env.WebRootPath, "uploads");
-            return "Test..." + id;
+            ResponseModel response = new ResponseModel();
+            response.status = "success";
+            response.content = "test";
+            var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            return responseJson;
         }
     }
 }

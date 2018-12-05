@@ -119,7 +119,7 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cancelSettings.Location" type="System.Drawing.Point, System.Drawing">
-    <value>345, 78</value>
+    <value>377, 126</value>
   </data>
   <data name="cancelSettings.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -141,13 +141,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cancelSettings.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>8</value>
   </data>
   <data name="saveSettings.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="saveSettings.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 78</value>
+    <value>284, 126</value>
   </data>
   <data name="saveSettings.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -168,85 +168,85 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;saveSettings.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
-  <data name="serverURL.Location" type="System.Drawing.Point, System.Drawing">
-    <value>82, 37</value>
+  <data name="uploadURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>122, 45</value>
   </data>
-  <data name="serverURL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>338, 20</value>
+  <data name="uploadURL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>330, 20</value>
   </data>
-  <data name="serverURL.TabIndex" type="System.Int32, mscorlib">
+  <data name="uploadURL.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;serverURL.Name" xml:space="preserve">
-    <value>serverURL</value>
+  <data name="&gt;&gt;uploadURL.Name" xml:space="preserve">
+    <value>uploadURL</value>
   </data>
-  <data name="&gt;&gt;serverURL.Type" xml:space="preserve">
+  <data name="&gt;&gt;uploadURL.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;serverURL.Parent" xml:space="preserve">
+  <data name="&gt;&gt;uploadURL.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;serverURL.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;uploadURL.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
-  <data name="serverLabel.AutoSize" type="System.Boolean, mscorlib">
+  <data name="uploadLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="serverLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 40</value>
+  <data name="uploadLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>54, 48</value>
   </data>
-  <data name="serverLabel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="uploadLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 13</value>
   </data>
-  <data name="serverLabel.TabIndex" type="System.Int32, mscorlib">
+  <data name="uploadLabel.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="serverLabel.Text" xml:space="preserve">
+  <data name="uploadLabel.Text" xml:space="preserve">
     <value>Server URL:</value>
   </data>
-  <data name="&gt;&gt;serverLabel.Name" xml:space="preserve">
-    <value>serverLabel</value>
+  <data name="&gt;&gt;uploadLabel.Name" xml:space="preserve">
+    <value>uploadLabel</value>
   </data>
-  <data name="&gt;&gt;serverLabel.Type" xml:space="preserve">
+  <data name="&gt;&gt;uploadLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;serverLabel.Parent" xml:space="preserve">
+  <data name="&gt;&gt;uploadLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;serverLabel.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="&gt;&gt;uploadLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
-  <data name="wrongURL.AutoSize" type="System.Boolean, mscorlib">
+  <data name="wrongServerURL.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="wrongURL.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 60</value>
+  <data name="wrongServerURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 68</value>
   </data>
-  <data name="wrongURL.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="wrongServerURL.Size" type="System.Drawing.Size, System.Drawing">
     <value>109, 13</value>
   </data>
-  <data name="wrongURL.TabIndex" type="System.Int32, mscorlib">
+  <data name="wrongServerURL.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="wrongURL.Text" xml:space="preserve">
+  <data name="wrongServerURL.Text" xml:space="preserve">
     <value>Incorrect URL format!</value>
   </data>
-  <data name="wrongURL.Visible" type="System.Boolean, mscorlib">
+  <data name="wrongServerURL.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;wrongURL.Name" xml:space="preserve">
-    <value>wrongURL</value>
+  <data name="&gt;&gt;wrongServerURL.Name" xml:space="preserve">
+    <value>wrongServerURL</value>
   </data>
-  <data name="&gt;&gt;wrongURL.Type" xml:space="preserve">
+  <data name="&gt;&gt;wrongServerURL.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;wrongURL.Parent" xml:space="preserve">
+  <data name="&gt;&gt;wrongServerURL.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;wrongURL.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;wrongServerURL.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -273,6 +273,91 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="showLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="showLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="showLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 91</value>
+  </data>
+  <data name="showLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 13</value>
+  </data>
+  <data name="showLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="showLabel.Text" xml:space="preserve">
+    <value>Slideshow base URL:</value>
+  </data>
+  <data name="&gt;&gt;showLabel.Name" xml:space="preserve">
+    <value>showLabel</value>
+  </data>
+  <data name="&gt;&gt;showLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;showLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="showURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>122, 88</value>
+  </data>
+  <data name="showURL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>330, 20</value>
+  </data>
+  <data name="showURL.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;showURL.Name" xml:space="preserve">
+    <value>showURL</value>
+  </data>
+  <data name="&gt;&gt;showURL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showURL.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;showURL.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="wrongShowURL.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="wrongShowURL.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="wrongShowURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 111</value>
+  </data>
+  <data name="wrongShowURL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 13</value>
+  </data>
+  <data name="wrongShowURL.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="wrongShowURL.Text" xml:space="preserve">
+    <value>Incorrect URL format!</value>
+  </data>
+  <data name="wrongShowURL.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;wrongShowURL.Name" xml:space="preserve">
+    <value>wrongShowURL</value>
+  </data>
+  <data name="&gt;&gt;wrongShowURL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wrongShowURL.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;wrongShowURL.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -285,7 +370,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>432, 113</value>
+    <value>464, 161</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Settings</value>

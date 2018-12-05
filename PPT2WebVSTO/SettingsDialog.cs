@@ -12,71 +12,73 @@ namespace PPT2WebVSTO
 {
     public partial class SettingsDialog : Form
     {
-        public SettingsDialog(string url)
+        public SettingsDialog(string upURL, string shURL)
         {
             InitializeComponent();
             saveSettings.Enabled = false;
-            serverURL.Text = url;
+            uploadURL.Text = upURL;
+            showURL.Text = shURL;
         }
+
+        private bool serverChanged = false;
+        private bool showChanged = false;
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            var uriName = serverURL.Text;
-            Uri uriResult;
-            bool isURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
-                            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-            if (isURL)
-            {
-                wrongURL.Visible = false;
-                saveSettings.Enabled = false;
-                Properties.Settings.Default.uploadURL = serverURL.Text;
-                this.Close();
-            }
-            else
-            {
-                wrongURL.Visible = true;
-            }
-
+            if (serverChanged)
+                Properties.Settings.Default.uploadURL = uploadURL.Text;
+            if (showChanged)
+                Properties.Settings.Default.showURL = showURL.Text;
+            this.Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            serverURL.Text = Properties.Settings.Default.uploadURL;
-            wrongURL.Visible = false;
+            uploadURL.Text = Properties.Settings.Default.uploadURL;
+            showURL.Text = Properties.Settings.Default.showURL;
+            wrongServerURL.Visible = false;
+            wrongShowURL.Visible = false;
             this.Close();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void serverURL_TextChanged(object sender, EventArgs e)
         {
-            var uriName = serverURL.Text;
+            var uriName = uploadURL.Text;
             Uri uriResult;
             bool isURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
                             && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
             if (isURL)
             {
-                wrongURL.Visible = false;
-                saveSettings.Enabled = true;
+                wrongServerURL.Visible = false;
+                serverChanged = true;
+                if (!wrongShowURL.Visible)
+                    saveSettings.Enabled = true;
             }
             else
             {
                 saveSettings.Enabled = false;
-                wrongURL.Visible = true;
+                wrongServerURL.Visible = true;
             }
         }
 
-        private void wrongURL_Click(object sender, EventArgs e)
+        private void showURL_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
+            var uriName = showURL.Text;
+            Uri uriResult;
+            bool isURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
+                            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            if (isURL)
+            {
+                wrongShowURL.Visible = false;
+                showChanged = true;
+                if(!wrongServerURL.Visible)
+                    saveSettings.Enabled = true;
+            }
+            else
+            {
+                saveSettings.Enabled = false;
+                wrongShowURL.Visible = true;
+            }
         }
     }
 }

@@ -31,10 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsDialog));
             this.cancelSettings = new System.Windows.Forms.Button();
             this.saveSettings = new System.Windows.Forms.Button();
-            this.serverURL = new System.Windows.Forms.TextBox();
-            this.serverLabel = new System.Windows.Forms.Label();
-            this.wrongURL = new System.Windows.Forms.Label();
+            this.uploadURL = new System.Windows.Forms.TextBox();
+            this.uploadLabel = new System.Windows.Forms.Label();
+            this.wrongServerURL = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.showLabel = new System.Windows.Forms.Label();
+            this.showURL = new System.Windows.Forms.TextBox();
+            this.wrongShowURL = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cancelSettings
@@ -51,39 +54,56 @@
             this.saveSettings.UseVisualStyleBackColor = true;
             this.saveSettings.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // serverURL
+            // uploadURL
             // 
-            resources.ApplyResources(this.serverURL, "serverURL");
-            this.serverURL.Name = "serverURL";
-            this.serverURL.TextChanged += new System.EventHandler(this.serverURL_TextChanged);
+            resources.ApplyResources(this.uploadURL, "uploadURL");
+            this.uploadURL.Name = "uploadURL";
+            this.uploadURL.TextChanged += new System.EventHandler(this.serverURL_TextChanged);
             // 
-            // serverLabel
+            // uploadLabel
             // 
-            resources.ApplyResources(this.serverLabel, "serverLabel");
-            this.serverLabel.Name = "serverLabel";
-            this.serverLabel.Click += new System.EventHandler(this.label1_Click);
+            resources.ApplyResources(this.uploadLabel, "uploadLabel");
+            this.uploadLabel.Name = "uploadLabel";
             // 
-            // wrongURL
+            // wrongServerURL
             // 
-            resources.ApplyResources(this.wrongURL, "wrongURL");
-            this.wrongURL.ForeColor = System.Drawing.Color.Red;
-            this.wrongURL.Name = "wrongURL";
-            this.wrongURL.Click += new System.EventHandler(this.wrongURL_Click);
+            resources.ApplyResources(this.wrongServerURL, "wrongServerURL");
+            this.wrongServerURL.ForeColor = System.Drawing.Color.Red;
+            this.wrongServerURL.Name = "wrongServerURL";
             // 
             // label1
             // 
             resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
+            // 
+            // showLabel
+            // 
+            resources.ApplyResources(this.showLabel, "showLabel");
+            this.showLabel.Name = "showLabel";
+            // 
+            // showURL
+            // 
+            resources.ApplyResources(this.showURL, "showURL");
+            this.showURL.Name = "showURL";
+            this.showURL.TextChanged += new System.EventHandler(this.showURL_TextChanged);
+            // 
+            // wrongShowURL
+            // 
+            resources.ApplyResources(this.wrongShowURL, "wrongShowURL");
+            this.wrongShowURL.ForeColor = System.Drawing.Color.Red;
+            this.wrongShowURL.Name = "wrongShowURL";
             // 
             // SettingsDialog
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.wrongShowURL);
+            this.Controls.Add(this.showURL);
+            this.Controls.Add(this.showLabel);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.wrongURL);
-            this.Controls.Add(this.serverLabel);
-            this.Controls.Add(this.serverURL);
+            this.Controls.Add(this.wrongServerURL);
+            this.Controls.Add(this.uploadLabel);
+            this.Controls.Add(this.uploadURL);
             this.Controls.Add(this.saveSettings);
             this.Controls.Add(this.cancelSettings);
             this.Name = "SettingsDialog";
@@ -98,9 +118,12 @@
 
         private System.Windows.Forms.Button cancelSettings;
         private System.Windows.Forms.Button saveSettings;
-        private System.Windows.Forms.TextBox serverURL;
-        private System.Windows.Forms.Label serverLabel;
-        private System.Windows.Forms.Label wrongURL;
+        private System.Windows.Forms.TextBox uploadURL;
+        private System.Windows.Forms.Label uploadLabel;
+        private System.Windows.Forms.Label wrongServerURL;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label showLabel;
+        private System.Windows.Forms.TextBox showURL;
+        private System.Windows.Forms.Label wrongShowURL;
     }
 }

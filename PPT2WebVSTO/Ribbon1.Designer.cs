@@ -38,13 +38,15 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.checkBox1 = this.Factory.CreateRibbonCheckBox();
-            this.URLbox = this.Factory.CreateRibbonEditBox();
-            this.separator1 = this.Factory.CreateRibbonSeparator();
-            this.separator2 = this.Factory.CreateRibbonSeparator();
+            this.label2 = this.Factory.CreateRibbonLabel();
+            this.Locator = this.Factory.CreateRibbonEditBox();
+            this.separator3 = this.Factory.CreateRibbonSeparator();
             this.PPT2Web = this.Factory.CreateRibbonButton();
             this.deleteFromWeb = this.Factory.CreateRibbonButton();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.CopyToClipboard = this.Factory.CreateRibbonButton();
             this.OpenInBrowser = this.Factory.CreateRibbonButton();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -59,7 +61,9 @@
             // group1
             // 
             this.group1.Items.Add(this.checkBox1);
-            this.group1.Items.Add(this.URLbox);
+            this.group1.Items.Add(this.label2);
+            this.group1.Items.Add(this.Locator);
+            this.group1.Items.Add(this.separator3);
             this.group1.Items.Add(this.PPT2Web);
             this.group1.Items.Add(this.deleteFromWeb);
             this.group1.Items.Add(this.separator1);
@@ -77,22 +81,22 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox1_Click);
             // 
-            // URLbox
+            // label2
             // 
-            this.URLbox.Enabled = false;
-            this.URLbox.Label = "URL:";
-            this.URLbox.Name = "URLbox";
-            this.URLbox.SizeString = "https://ppt2webfrontend";
-            this.URLbox.Text = "<deck not exported>";
-            this.URLbox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.URLbox_TextChanged);
+            this.label2.Label = "PP2Web locator:";
+            this.label2.Name = "label2";
             // 
-            // separator1
+            // Locator
             // 
-            this.separator1.Name = "separator1";
+            this.Locator.Enabled = false;
+            this.Locator.Label = "";
+            this.Locator.Name = "Locator";
+            this.Locator.SizeString = "XXXXXXXXXXXXXXXX";
+            this.Locator.Text = null;
             // 
-            // separator2
+            // separator3
             // 
-            this.separator2.Name = "separator2";
+            this.separator3.Name = "separator3";
             // 
             // PPT2Web
             // 
@@ -113,6 +117,10 @@
             this.deleteFromWeb.ShowImage = true;
             this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.RemoveFromWeb_Click);
             // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
             // CopyToClipboard
             // 
             this.CopyToClipboard.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -132,6 +140,10 @@
             this.OpenInBrowser.Name = "OpenInBrowser";
             this.OpenInBrowser.ShowImage = true;
             this.OpenInBrowser.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenInBrowser_Click);
+            // 
+            // separator2
+            // 
+            this.separator2.Name = "separator2";
             // 
             // Settings
             // 
@@ -162,13 +174,15 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton PPT2Web;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBox1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox URLbox;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton CopyToClipboard;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton OpenInBrowser;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteFromWeb;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Settings;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator3;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel label2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox Locator;
     }
 
     partial class ThisRibbonCollection
