@@ -33,13 +33,13 @@ namespace PPT2WebUploadService.Controllers
                 if (formData.file != null && formData.file.Length > 0)
                 {
                     var uniqueFileName = "";
-                    if (formData.deckDir == "none" || formData.deckDir == null)
+                    if (formData.locator == "none" || formData.locator == null)
                         uniqueFileName = GetUniqueFileName(formData.file.FileName);
                     else
-                        uniqueFileName = formData.deckDir + Path.GetExtension(formData.file.FileName);
+                        uniqueFileName = formData.locator + Path.GetExtension(formData.file.FileName);
                     var tempZipFilePath = Path.Combine(uploads, GetUniqueFileName(uniqueFileName));
-                    var deckDir = Path.GetFileNameWithoutExtension(uniqueFileName);
-                    var extractPath = Path.Combine(uploads, deckDir);
+                    var locator = Path.GetFileNameWithoutExtension(uniqueFileName);
+                    var extractPath = Path.Combine(uploads, locator);
                     if (Directory.Exists(extractPath))
                         Directory.Delete(extractPath, true);
                     using (var fileStream = new FileStream(tempZipFilePath, FileMode.Create))
@@ -58,7 +58,7 @@ namespace PPT2WebUploadService.Controllers
                     if (System.IO.File.Exists(tempZipFilePath))
                         System.IO.File.Delete(tempZipFilePath);
                     responseStatus = "success";
-                    responseContent = deckDir;
+                    responseContent = locator;
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace PPT2WebUploadService.Controllers
         public class FileInputModel
         {
             public IFormFile file { get; set; }
-            public string deckDir { get; set; }
+            public string locator { get; set; }
             public string command { get; set; }
         }
 

@@ -22,14 +22,15 @@ namespace PPT2WebVSTO
     */
     public partial class Ribbon1
     {
-        private readonly string url = Properties.Settings.Default.uploadURL;
-        SettingsDialog settingsDialog = new SettingsDialog(Properties.Settings.Default.uploadURL, Properties.Settings.Default.showURL);
+        private readonly string uploadURL = Properties.Settings.Default.uploadURL;
+        public SettingsDialog settingsDialog;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-            var app = Globals.ThisAddIn.Application;
+            settingsDialog = new SettingsDialog(Properties.Settings.Default.uploadURL, Properties.Settings.Default.showURL);
+            PowerPoint.Application app = Globals.ThisAddIn.Application;
             app.AfterPresentationOpen += AfterPresentationOpenHandle;
             app.AfterNewPresentation += AfterPresentationOpenHandle;
-            app.PresentationBeforeClose += resetControls;
+            app.PresentationBeforeClose += ResetControls;
             app.WindowActivate += SwitchWindowsHandle;
             // Need to detect "save as..."
             //app.PresentationBeforeSave += clearSavedProperties;
@@ -79,7 +80,7 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void resetControls(Presentation pres, ref bool cancel)
+        private void ResetControls(Presentation pres, ref bool cancel)
         {
             Locator.Text = "";
             Locator.Enabled = false;
@@ -89,7 +90,7 @@ namespace PPT2WebVSTO
             PPT2Web.Enabled = false;
         }
 
-        private void clearSavedProperties(Presentation pres,  ref bool cancel)
+        private void ClearSavedProperties(Presentation pres,  ref bool cancel)
         {
             Locator.Text = "";
             Locator.Enabled = false;
@@ -97,7 +98,7 @@ namespace PPT2WebVSTO
             deleteFromWeb.Enabled = false;
             OpenInBrowser.Enabled = false;
             PPT2Web.Enabled = true;
-            clearDocumentProperty(pres, "PPT2Web locator");
+            ClearDocumentProperty(pres, "PPT2Web locator");
         }
 
         private void Publish2Web_Click(object sender, RibbonControlEventArgs e)
@@ -174,16 +175,16 @@ namespace PPT2WebVSTO
                 //using (FileStream zipFs = File.Open(zipPath, FileMode.Open))
                 
                 FileStream zipFs = File.Open(zipPath, FileMode.Open);
-                string savedDeckDir = "";
+                string savedLocator = "";
                 if (ReadDocumentProperty(pptPresentation, "PPT2Web locator") != null)
                 {
-                    savedDeckDir = ReadDocumentProperty(pptPresentation, "PPT2Web locator");
-                    Debug.Print("xxx I already have a deckdir: " + savedDeckDir);
+                    savedLocator = ReadDocumentProperty(pptPresentation, "PPT2Web locator");
+                    Debug.Print("xxx I already have a locator: " + savedLocator);
                 }
                 else
-                    Debug.Print("xxx No savedDeckDir saved!!!");
+                    Debug.Print("xxx No savedLocator saved!!!");
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                var uploadStatus = UploadZipAsync(zipFs, zipPath, savedDeckDir, pptPresentation);
+                var uploadStatus = UploadZipAsync(zipFs, zipPath, savedLocator, pptPresentation);
 
                 // Delete temporary folder:
                 if (Directory.Exists(destinationPathTmp))
@@ -203,19 +204,19 @@ namespace PPT2WebVSTO
             Presentation pptPresentation = Globals.ThisAddIn.GetActiveDeck();
             if (ReadDocumentProperty(pptPresentation, "PPT2Web locator") != null)
             {
-                string savedDeckDir = ReadDocumentProperty(pptPresentation, "PPT2Web locator");
-                Debug.Print("xxx I do have a deckdir: " + savedDeckDir);
+                string savedLocator = ReadDocumentProperty(pptPresentation, "PPT2Web locator");
+                Debug.Print("xxx I do have a locator: " + savedLocator);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                var uploadStatus = RemoveDeckAsync(savedDeckDir, pptPresentation);
+                var uploadStatus = RemoveDeckAsync(savedLocator, pptPresentation);
             }
             else
             {
-                Debug.Print("No deckDir saved with the Powerpoint document!!!");
+                Debug.Print("No locator saved with the Powerpoint document!!!");
             }
         }
 
 
-        private async Task UploadZipAsync(Stream zipFile, string fileName, string deckDir, Presentation pptPresentation)
+        private async Task UploadZipAsync(Stream zipFile, string fileName, string locator, Presentation pptPresentation)
         {
             HttpContent fileStreamContent = new StreamContent(zipFile);
             fileStreamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data") { Name = "file", FileName = fileName };
@@ -227,25 +228,25 @@ namespace PPT2WebVSTO
                 using (var formData = new MultipartFormDataContent())
                 {
                     formData.Add(fileStreamContent);
-                    if (deckDir == "" || deckDir == null)
+                    if (locator == "" || locator == null)
                     {
                         formData.Add(new StringContent("create"), "command");
-                        formData.Add(new StringContent("none"), "deckDir");
+                        formData.Add(new StringContent("none"), "locator");
                     }
                     else
                     {
                         formData.Add(new StringContent("update"), "command");
-                        formData.Add(new StringContent(deckDir), "deckDir");
+                        formData.Add(new StringContent(locator), "locator");
                     }
                     try
                     {
-                        HttpResponseMessage response = await client.PostAsync(url, formData);
+                        HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                         string responseJson = await response.Content.ReadAsStringAsync();
                         ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
                         if (responseModel.status == "success")
                         {
-                            string webDeckDir = responseModel.content;
-                            Locator.Text = webDeckDir;
+                            string webLocator = responseModel.content;
+                            Locator.Text = webLocator;
                             //Locator.Enabled = true;
                             CopyToClipboard.Enabled = true;
                             deleteFromWeb.Enabled = true;
@@ -254,7 +255,7 @@ namespace PPT2WebVSTO
                             Settings.Enabled = true;
                             try
                             {
-                                saveDocumentProperty(pptPresentation, "PPT2Web locator", webDeckDir);
+                                SaveDocumentProperty(pptPresentation, "PPT2Web locator", webLocator);
                             }
                             catch (Exception e)
                             {
@@ -283,18 +284,18 @@ namespace PPT2WebVSTO
             }
         }
 
-        private async Task RemoveDeckAsync(string deckDir, Presentation pptPresentation)
+        private async Task RemoveDeckAsync(string locator, Presentation pptPresentation)
         {
             using (var client = new HttpClient())
             {
                 var formData = new FormUrlEncodedContent(new[]
                 {
                     new KeyValuePair<string, string>("command", "delete"),
-                    new KeyValuePair<string, string>("deckDir", deckDir)
+                    new KeyValuePair<string, string>("locator", locator)
                 });
                 try
                 {
-                    HttpResponseMessage response = await client.PostAsync(url, formData);
+                    HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                     string responseJson = await response.Content.ReadAsStringAsync();
                     ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
                     if(responseModel.status == "success") //success
@@ -305,7 +306,7 @@ namespace PPT2WebVSTO
                         deleteFromWeb.Enabled = false;
                         OpenInBrowser.Enabled = false;
                         PPT2Web.Enabled = true;
-                        clearDocumentProperty(pptPresentation, "PPT2Web locator");
+                        ClearDocumentProperty(pptPresentation, "PPT2Web locator");
                     }
                 }
                 catch (Exception e)
@@ -322,7 +323,7 @@ namespace PPT2WebVSTO
             {
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response = await client.GetAsync(uploadURL);
                     Locator.Text = response.ToString();
                     return "YAY! Response: " + response.ToString();
                 }
@@ -335,12 +336,7 @@ namespace PPT2WebVSTO
             }
         }
 
-        private void checkBox1_Click(object sender, RibbonControlEventArgs e)
-        {
-
-        }
-
-        private void URLbox_TextChanged(object sender, RibbonControlEventArgs e)
+        private void CheckBox1_Click(object sender, RibbonControlEventArgs e)
         {
 
         }
@@ -377,7 +373,7 @@ namespace PPT2WebVSTO
             settingsDialog.ShowDialog();
         }
 
-        private void saveDocumentProperty(Presentation pptPresentation, string prop, string value)
+        private void SaveDocumentProperty(Presentation pptPresentation, string prop, string value)
         {
             if (ReadDocumentProperty(pptPresentation, prop) != null)
             {
@@ -386,7 +382,7 @@ namespace PPT2WebVSTO
             pptPresentation.CustomDocumentProperties.Add(prop, false, MsoDocProperties.msoPropertyTypeString, value);
         }
 
-        private void clearDocumentProperty(Presentation pptPresentation, string prop)
+        private void ClearDocumentProperty(Presentation pptPresentation, string prop)
         {
             if (ReadDocumentProperty(pptPresentation, prop) != null)
             {

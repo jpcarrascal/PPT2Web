@@ -79,7 +79,7 @@
             this.checkBox1.Checked = true;
             this.checkBox1.Label = "Include hidden slides";
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox1_Click);
+            this.checkBox1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.CheckBox1_Click);
             // 
             // label2
             // 
