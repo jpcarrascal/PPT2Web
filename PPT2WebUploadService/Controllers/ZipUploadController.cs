@@ -16,18 +16,50 @@ namespace PPT2WebUploadService.Controllers
     public class ZipUploadController : ControllerBase
     {
         private readonly IHostingEnvironment env;
+        private readonly string uploadDirectory;
         public ZipUploadController(IHostingEnvironment environment)
         {
             env = environment ?? throw new ArgumentNullException(nameof(environment));
+            uploadDirectory = Path.Combine(env.ContentRootPath, "uploads");
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public /*async Task*/ ActionResult<string> Post([FromForm] FileInputModel formData)
+        public /*async Task*/ ActionResult<string> Post([FromForm] FormDataModel formData)
         {
-            var uploads = Path.Combine(env.ContentRootPath, "uploads");
-            var responseStatus = "error";
-            var responseContent = "";
+            ResponseModel response = new ResponseModel();
+            response.status = "error";
+            response.content = "Unknown error!";
+            if(formData.command != "" && formData.command != null)
+            {
+                switch (formData.command)
+                {
+                    case "create":
+                        response = CreateOrUpdateSlideShow(formData, response);
+                        break;
+                    case "update":
+                        response = CreateOrUpdateSlideShow(formData, response);
+                        break;
+                    case "delete":
+                        response = DeleteSlideShow(formData, response);
+                        break;
+                    default:
+                        response.status = "error";
+                        response.content = "Wrong command specified!";
+                        break;
+                }
+            }
+            else
+            {
+                response.status = "error";
+                response.content = "No command specified!";
+            }
+            var responseJson = JsonConvert.SerializeObject(response);
+            return responseJson;
+        }
+
+        private ResponseModel CreateOrUpdateSlideShow(FormDataModel formData, ResponseModel response)
+        {
             try
             {
                 if (formData.file != null && formData.file.Length > 0)
@@ -37,11 +69,11 @@ namespace PPT2WebUploadService.Controllers
                         uniqueFileName = GetUniqueFileName(formData.file.FileName);
                     else
                         uniqueFileName = formData.locator + Path.GetExtension(formData.file.FileName);
-                    var tempZipFilePath = Path.Combine(uploads, GetUniqueFileName(uniqueFileName));
+                    var tempZipFilePath = Path.Combine(uploadDirectory, GetUniqueFileName(uniqueFileName));
                     var locator = Path.GetFileNameWithoutExtension(uniqueFileName);
-                    var extractPath = Path.Combine(uploads, locator);
-                    if (Directory.Exists(extractPath))
-                        Directory.Delete(extractPath, true);
+                    var slideShowPath = Path.Combine(uploadDirectory, locator);
+                    if (Directory.Exists(slideShowPath))
+                        Directory.Delete(slideShowPath, true);
                     using (var fileStream = new FileStream(tempZipFilePath, FileMode.Create))
                     {
                         /*await file.CopyToAsync(fileStream);*/
@@ -49,36 +81,58 @@ namespace PPT2WebUploadService.Controllers
                     }
                     try
                     {
-                        ZipFile.ExtractToDirectory(tempZipFilePath, extractPath);
+                        ZipFile.ExtractToDirectory(tempZipFilePath, slideShowPath);
                     }
-                    catch (Exception e) {
-                        responseStatus = "error";
-                        responseContent = "Error extracting zip file in server!";
+                    catch (Exception e)
+                    {
+                        response.status = "error";
+                        response.content = "Error extracting zip file in server!";
                     }
                     if (System.IO.File.Exists(tempZipFilePath))
                         System.IO.File.Delete(tempZipFilePath);
-                    responseStatus = "success";
-                    responseContent = locator;
+                    response.status = "success";
+                    response.content = locator;
                 }
                 else
                 {
-                    responseStatus = "error";
-                    responseContent = "No file specified!";
+                    response.status = "error";
+                    response.content = "No file specified!";
                 }
             }
             catch (Exception e)
             {
-                responseStatus = "error";
-                responseContent = "Some other error: " + e.ToString();
+                response.status = "error";
+                response.content = "Error saving or updating! (Cannot find path)";
             }
-            ResponseModel response = new ResponseModel();
-            response.status = responseStatus;
-            response.content = responseContent;
-            var responseJson = JsonConvert.SerializeObject(response);
-            return responseJson;
+            return response;
         }
 
-        public class FileInputModel
+        private ResponseModel DeleteSlideShow(FormDataModel formData, ResponseModel response)
+        {
+            if (formData.locator != null && formData.locator != "")
+            {
+                var slideShowPath = Path.Combine(uploadDirectory, formData.locator);
+                if (Directory.Exists(slideShowPath))
+                {
+                    Directory.Delete(slideShowPath, true);
+                    response.status = "success";
+                    response.content = formData.locator + " removed successfully.";
+                }
+                else
+                {
+                    response.status = "success";
+                    response.content = formData.locator + " does not exist.";
+                }
+            }
+            else
+            {
+                response.status = "error";
+                response.content = "No locator specified!";
+            }
+            return response;
+        }
+
+        public class FormDataModel
         {
             public IFormFile file { get; set; }
             public string locator { get; set; }
@@ -107,7 +161,7 @@ namespace PPT2WebUploadService.Controllers
             ResponseModel response = new ResponseModel();
             response.status = "success";
             response.content = "test";
-            var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            var responseJson = JsonConvert.SerializeObject(response);
             return responseJson;
         }
     }

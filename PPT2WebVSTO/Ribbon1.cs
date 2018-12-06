@@ -297,42 +297,28 @@ namespace PPT2WebVSTO
                 {
                     HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                     string responseJson = await response.Content.ReadAsStringAsync();
+                    Debug.Print("xxxxx server responded: " + responseJson);
                     ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
                     if(responseModel.status == "success") //success
                     {
                         Locator.Text = "";
-                        Locator.Enabled = false;
-                        CopyToClipboard.Enabled = false;
-                        deleteFromWeb.Enabled = false;
-                        OpenInBrowser.Enabled = false;
-                        PPT2Web.Enabled = true;
-                        ClearDocumentProperty(pptPresentation, "PPT2Web locator");
                     }
+                    else
+                    {
+                        Locator.Text = responseModel.content;
+                    }
+                    Locator.Enabled = false;
+                    CopyToClipboard.Enabled = false;
+                    deleteFromWeb.Enabled = false;
+                    OpenInBrowser.Enabled = false;
+                    PPT2Web.Enabled = true;
+                    ClearDocumentProperty(pptPresentation, "PPT2Web locator");
                 }
                 catch (Exception e)
                 {
                     Debug.Print("xxxx Houston!!!");
                 }
 
-            }
-        }
-
-        public async Task<string> TestAPIGet()
-        {
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    HttpResponseMessage response = await client.GetAsync(uploadURL);
-                    Locator.Text = response.ToString();
-                    return "YAY! Response: " + response.ToString();
-                }
-                catch (Exception ex)
-                {
-                    Debug.Print("Ooops! Exception when uploading (GET) -> " + ex.ToString());
-                    Locator.Text = ex.ToString();
-                    return "XXX there was a problem again";
-                }
             }
         }
 
