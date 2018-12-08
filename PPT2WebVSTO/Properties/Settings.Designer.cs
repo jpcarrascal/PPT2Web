@@ -25,7 +25,7 @@ namespace PPT2WebVSTO.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://ppt2webuploadservice.azurewebsites.net/api/zipupload/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://ppt2webuploadservice.azurewebsites.net/api/")]
         public string uploadURL {
             get {
                 return ((string)(this["uploadURL"]));

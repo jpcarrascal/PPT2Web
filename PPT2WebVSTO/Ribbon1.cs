@@ -22,12 +22,17 @@ namespace PPT2WebVSTO
     */
     public partial class Ribbon1
     {
-        private readonly string uploadURL = Properties.Settings.Default.uploadURL;
+        private string apiURL;
+        private string uploadURL;
         public SettingsDialog settingsDialog;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             settingsDialog = new SettingsDialog(Properties.Settings.Default.uploadURL, Properties.Settings.Default.showURL);
             PowerPoint.Application app = Globals.ThisAddIn.Application;
+            apiURL = Properties.Settings.Default.uploadURL;
+            if (!apiURL.EndsWith("/"))
+                apiURL = apiURL + "/";
+            uploadURL = apiURL + "upload/";
             app.AfterPresentationOpen += AfterPresentationOpenHandle;
             app.AfterNewPresentation += AfterPresentationOpenHandle;
             app.PresentationBeforeClose += ResetControls;

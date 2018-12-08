@@ -195,16 +195,16 @@
     <value>True</value>
   </data>
   <data name="uploadLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 48</value>
+    <value>25, 48</value>
   </data>
   <data name="uploadLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 13</value>
+    <value>94, 13</value>
   </data>
   <data name="uploadLabel.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="uploadLabel.Text" xml:space="preserve">
-    <value>Server URL:</value>
+    <value>Base upload URL:</value>
   </data>
   <data name="&gt;&gt;uploadLabel.Name" xml:space="preserve">
     <value>uploadLabel</value>
@@ -286,13 +286,13 @@
     <value>11, 91</value>
   </data>
   <data name="showLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 13</value>
+    <value>108, 13</value>
   </data>
   <data name="showLabel.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="showLabel.Text" xml:space="preserve">
-    <value>Slideshow base URL:</value>
+    <value>Base slideshow URL:</value>
   </data>
   <data name="&gt;&gt;showLabel.Name" xml:space="preserve">
     <value>showLabel</value>
