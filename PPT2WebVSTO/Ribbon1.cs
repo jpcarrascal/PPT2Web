@@ -230,12 +230,12 @@ namespace PPT2WebVSTO
                     formData.Add(fileStreamContent);
                     if (locator == "" || locator == null)
                     {
-                        formData.Add(new StringContent("create"), "command");
+                        formData.Add(new StringContent("create"), "action");
                         formData.Add(new StringContent("none"), "locator");
                     }
                     else
                     {
-                        formData.Add(new StringContent("update"), "command");
+                        formData.Add(new StringContent("update"), "action");
                         formData.Add(new StringContent(locator), "locator");
                     }
                     try
@@ -290,7 +290,7 @@ namespace PPT2WebVSTO
             {
                 var formData = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("command", "delete"),
+                    new KeyValuePair<string, string>("action", "delete"),
                     new KeyValuePair<string, string>("locator", locator)
                 });
                 try

@@ -13,11 +13,11 @@ namespace PPT2WebUploadService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ZipUploadController : ControllerBase
+    public class UploadController : ControllerBase
     {
         private readonly IHostingEnvironment env;
         private readonly string uploadDirectory;
-        public ZipUploadController(IHostingEnvironment environment)
+        public UploadController(IHostingEnvironment environment)
         {
             env = environment ?? throw new ArgumentNullException(nameof(environment));
             uploadDirectory = Path.Combine(env.ContentRootPath, "uploads");
@@ -30,9 +30,9 @@ namespace PPT2WebUploadService.Controllers
             ResponseModel response = new ResponseModel();
             response.status = "error";
             response.content = "Unknown error!";
-            if(formData.command != "" && formData.command != null)
+            if(formData.action != "" && formData.action != null)
             {
-                switch (formData.command)
+                switch (formData.action)
                 {
                     case "create":
                         response = CreateOrUpdateSlideShow(formData, response);
@@ -45,14 +45,14 @@ namespace PPT2WebUploadService.Controllers
                         break;
                     default:
                         response.status = "error";
-                        response.content = "Wrong command specified!";
+                        response.content = "Wrong action specified!";
                         break;
                 }
             }
             else
             {
                 response.status = "error";
-                response.content = "No command specified!";
+                response.content = "No action specified!";
             }
             var responseJson = JsonConvert.SerializeObject(response);
             return responseJson;
@@ -136,7 +136,7 @@ namespace PPT2WebUploadService.Controllers
         {
             public IFormFile file { get; set; }
             public string locator { get; set; }
-            public string command { get; set; }
+            public string action { get; set; }
         }
 
         public class ResponseModel
