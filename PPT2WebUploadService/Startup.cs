@@ -39,6 +39,16 @@ namespace PPT2WebUploadService
             {
                 app.UseHsts();
             }
+
+            /*
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "api/[controller]",
+                    defaults: new { controller = "Upload", action = "WhatShouldIPutHere" });
+            });
+            */
             // Serve static files. Remove if Azure storage is used.
             app.UseStaticFiles();
             app.UseHttpsRedirection();

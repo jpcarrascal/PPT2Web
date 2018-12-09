@@ -230,22 +230,28 @@ namespace PPT2WebVSTO
             using (var client = new HttpClient())
             {
                 //client.DefaultRequestHeaders.ExpectContinue = false;
+                var method = HttpMethod.Post;
                 using (var formData = new MultipartFormDataContent())
                 {
                     formData.Add(fileStreamContent);
                     if (locator == "" || locator == null)
                     {
                         formData.Add(new StringContent("create"), "action");
-                        formData.Add(new StringContent("none"), "locator");
+                        formData.Add(new StringContent(""), "locator");
+                        method = HttpMethod.Post;
                     }
                     else
                     {
                         formData.Add(new StringContent("update"), "action");
                         formData.Add(new StringContent(locator), "locator");
+                        method = HttpMethod.Put;
                     }
                     try
                     {
-                        HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
+                        var request = new HttpRequestMessage(method, uploadURL);
+                        request.Content = formData;
+                        HttpResponseMessage response = await client.SendAsync(request);
+                        //HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                         string responseJson = await response.Content.ReadAsStringAsync();
                         ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
                         if (responseModel.status == "success")
@@ -293,16 +299,17 @@ namespace PPT2WebVSTO
         {
             using (var client = new HttpClient())
             {
-                var formData = new FormUrlEncodedContent(new[]
-                {
-                    new KeyValuePair<string, string>("action", "delete"),
-                    new KeyValuePair<string, string>("locator", locator)
-                });
+                var formData = new MultipartFormDataContent();
+                formData.Add(new StringContent("delete"), "action");
+                formData.Add(new StringContent(locator), "locator");
                 try
                 {
-                    HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
+                    var method = HttpMethod.Delete;
+                    var request = new HttpRequestMessage(method, uploadURL);
+                    request.Content = formData;
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    //HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                     string responseJson = await response.Content.ReadAsStringAsync();
-                    Debug.Print("xxxxx server responded: " + responseJson);
                     ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
                     if(responseModel.status == "success") //success
                     {
@@ -321,7 +328,7 @@ namespace PPT2WebVSTO
                 }
                 catch (Exception e)
                 {
-                    Debug.Print("xxxx Houston!!!");
+                    Debug.Print("xxxx Houston!!!" + e.ToString());
                 }
 
             }

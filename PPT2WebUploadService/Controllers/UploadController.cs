@@ -25,53 +25,92 @@ namespace PPT2WebUploadService.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public /*async Task*/ ActionResult<string> Post([FromForm] FormDataModel formData)
+        public ActionResult<string> Post([FromForm] FormDataModel formData)
         {
             ResponseModel response = new ResponseModel();
             response.status = "error";
             response.content = "Unknown error!";
-            if(formData.action != "" && formData.action != null)
+            response = CreateOrUpdateSlideShow(formData, response, "create");
+            var responseJson = JsonConvert.SerializeObject(response);
+            return responseJson;
+        }
+
+        [HttpPut]
+        [Consumes("multipart/form-data")]
+        public ActionResult<string> Put([FromForm] FormDataModel formData)
+        {
+            ResponseModel response = new ResponseModel();
+            response.status = "error";
+            response.content = "Unknown error!";
+            var slideShowPath = Path.Combine(uploadDirectory, formData.locator);
+            if (formData.locator == "" || formData.locator == null)
             {
-                switch (formData.action)
-                {
-                    case "create":
-                        response = CreateOrUpdateSlideShow(formData, response);
-                        break;
-                    case "update":
-                        response = CreateOrUpdateSlideShow(formData, response);
-                        break;
-                    case "delete":
-                        response = DeleteSlideShow(formData, response);
-                        break;
-                    default:
-                        response.status = "error";
-                        response.content = "Wrong action specified!";
-                        break;
-                }
+                response.status = "error";
+                response.content = "No locator specified!";
+            }
+            else if (!Directory.Exists(slideShowPath))
+            {
+                response.status = "error";
+                response.content = "'" + formData.locator + "' doesn't exist.";
             }
             else
             {
-                response.status = "error";
-                response.content = "No action specified!";
+                response = CreateOrUpdateSlideShow(formData, response, "update");
             }
             var responseJson = JsonConvert.SerializeObject(response);
             return responseJson;
         }
 
-        private ResponseModel CreateOrUpdateSlideShow(FormDataModel formData, ResponseModel response)
+        [HttpDelete]
+        [Consumes("multipart/form-data")]
+        public ActionResult<string> Delete([FromForm] FormDataModel formData)
         {
-            try
+            ResponseModel response = new ResponseModel();
+            response.status = "error";
+            response.content = "Unknown error!";
+            var slideShowPath = Path.Combine(uploadDirectory, formData.locator);
+            if (formData.locator == "" || formData.locator == null)
             {
-                if (formData.file != null && formData.file.Length > 0)
+                response.status = "error";
+                response.content = "No locator specified!";
+            }
+            else if (!Directory.Exists(slideShowPath))
+            {
+                response.status = "error";
+                response.content = "'" + formData.locator + "' doesn't exist.";
+            }
+            else
+            {
+                try
                 {
-                    var uniqueFileName = "";
-                    if (formData.locator == "none" || formData.locator == null)
-                        uniqueFileName = GetUniqueFileName(formData.file.FileName);
-                    else
-                        uniqueFileName = formData.locator + Path.GetExtension(formData.file.FileName);
-                    var tempZipFilePath = Path.Combine(uploadDirectory, GetUniqueFileName(uniqueFileName));
-                    var locator = Path.GetFileNameWithoutExtension(uniqueFileName);
-                    var slideShowPath = Path.Combine(uploadDirectory, locator);
+                    Directory.Delete(slideShowPath, true);
+                    response.status = "success";
+                    response.content = formData.locator + " removed successfully.";
+                }
+                catch (Exception e)
+                {
+                    response.status = "error";
+                    response.content = "Can't delete '" + formData.locator + "': permission denied!.";
+                }
+            }
+            var responseJson = JsonConvert.SerializeObject(response);
+            return responseJson;
+        }
+
+        private ResponseModel CreateOrUpdateSlideShow(FormDataModel formData, ResponseModel response, string action)
+        {
+            if (formData.file != null && formData.file.Length > 0)
+            {
+                var locator = "";
+                if (action == "create")
+                    locator = GetUniqueID16();
+                else
+                    locator = formData.locator;
+                var uniqueFileName = locator + Path.GetExtension(formData.file.FileName);
+                var tempZipFilePath = Path.Combine(uploadDirectory, GetUniqueID16() + ".zip");
+                var slideShowPath = Path.Combine(uploadDirectory, locator);
+                try
+                {
                     if (Directory.Exists(slideShowPath))
                         Directory.Delete(slideShowPath, true);
                     using (var fileStream = new FileStream(tempZipFilePath, FileMode.Create))
@@ -93,41 +132,16 @@ namespace PPT2WebUploadService.Controllers
                     response.status = "success";
                     response.content = locator;
                 }
-                else
+                catch (Exception e)
                 {
                     response.status = "error";
-                    response.content = "No file specified!";
-                }
-            }
-            catch (Exception e)
-            {
-                response.status = "error";
-                response.content = "Error saving or updating! (Cannot find path)";
-            }
-            return response;
-        }
-
-        private ResponseModel DeleteSlideShow(FormDataModel formData, ResponseModel response)
-        {
-            if (formData.locator != null && formData.locator != "")
-            {
-                var slideShowPath = Path.Combine(uploadDirectory, formData.locator);
-                if (Directory.Exists(slideShowPath))
-                {
-                    Directory.Delete(slideShowPath, true);
-                    response.status = "success";
-                    response.content = formData.locator + " removed successfully.";
-                }
-                else
-                {
-                    response.status = "success";
-                    response.content = formData.locator + " does not exist.";
+                    response.content = "Error saving or updating! (Cannot find path)";
                 }
             }
             else
             {
                 response.status = "error";
-                response.content = "No locator specified!";
+                response.content = "No file provided in request!";
             }
             return response;
         }
@@ -145,13 +159,9 @@ namespace PPT2WebUploadService.Controllers
             public string content { get; set; }
         }
 
-        private string GetUniqueFileName(string fileName)
+        private string GetUniqueID16()
         {
-            fileName = Path.GetFileName(fileName);
-            return Path.GetFileNameWithoutExtension(fileName)
-                      + "_"
-                      + Guid.NewGuid().ToString().Substring(0, 8)
-                      + Path.GetExtension(fileName);
+            return Guid.NewGuid().ToString().Substring(0, 18);
         }
 
         [HttpGet]
