@@ -22,23 +22,17 @@ namespace PPT2WebVSTO
     */
     public partial class Ribbon1
     {
-        private string apiURL;
         private string uploadURL;
         public SettingsDialog settingsDialog;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             settingsDialog = new SettingsDialog(Properties.Settings.Default.uploadURL, Properties.Settings.Default.showURL);
             PowerPoint.Application app = Globals.ThisAddIn.Application;
-            apiURL = Properties.Settings.Default.uploadURL;
-            if (!apiURL.EndsWith("/"))
-                apiURL = apiURL + "/";
-            uploadURL = apiURL + "upload/";
+            uploadURL = Properties.Settings.Default.uploadURL;
             app.AfterPresentationOpen += AfterPresentationOpenHandle;
             app.AfterNewPresentation += AfterPresentationOpenHandle;
             app.PresentationBeforeClose += ResetControls;
             app.WindowActivate += SwitchWindowsHandle;
-            // Need to detect "save as..."
-            //app.PresentationBeforeSave += clearSavedProperties;
         }
 
         private void SwitchWindowsHandle(Presentation pres, DocumentWindow window)
@@ -95,17 +89,6 @@ namespace PPT2WebVSTO
             PPT2Web.Enabled = false;
         }
 
-        private void ClearSavedProperties(Presentation pres,  ref bool cancel)
-        {
-            Locator.Text = "";
-            Locator.Enabled = false;
-            CopyToClipboard.Enabled = false;
-            deleteFromWeb.Enabled = false;
-            OpenInBrowser.Enabled = false;
-            PPT2Web.Enabled = true;
-            ClearDocumentProperty(pres, "PPT2Web locator");
-        }
-
         private void Publish2Web_Click(object sender, RibbonControlEventArgs e)
         {
             try
@@ -136,7 +119,6 @@ namespace PPT2WebVSTO
                 var csv = new StringBuilder();
                 foreach (Slide slide in pptPresentation.Slides)
                 {
-                    //if (slide.HasNotesPage == MsoTriState.msoTrue && (slide.SlideShowTransition.Hidden == MsoTriState.msoFalse || this.checkBox1.Checked == true))
                     if (slide.SlideShowTransition.Hidden == MsoTriState.msoFalse || this.checkBox1.Checked == true)
                     {
                         // From: https://stackoverflow.com/questions/20975165/powerpoint-add-on-to-get-text-in-notes-in-slides-and-convert-it-to-audio-doesn/20981228
@@ -264,6 +246,7 @@ namespace PPT2WebVSTO
                             OpenInBrowser.Enabled = true;
                             PPT2Web.Enabled = true;
                             Settings.Enabled = true;
+                            pptPresentation.Saved = MsoTriState.msoFalse;
                             try
                             {
                                 SaveDocumentProperty(pptPresentation, "PPT2Web locator", webLocator);
@@ -308,10 +291,9 @@ namespace PPT2WebVSTO
                     var request = new HttpRequestMessage(method, uploadURL);
                     request.Content = formData;
                     HttpResponseMessage response = await client.SendAsync(request);
-                    //HttpResponseMessage response = await client.PostAsync(uploadURL, formData);
                     string responseJson = await response.Content.ReadAsStringAsync();
                     ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(responseJson);
-                    if(responseModel.status == "success") //success
+                    if(responseModel.status == "success")
                     {
                         Locator.Text = "";
                     }
@@ -429,5 +411,9 @@ namespace PPT2WebVSTO
             return s;
         }
 
+        private void Locator_TextChanged(object sender, RibbonControlEventArgs e)
+        {
+
+        }
     }
 }

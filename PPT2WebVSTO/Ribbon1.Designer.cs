@@ -38,15 +38,15 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.checkBox1 = this.Factory.CreateRibbonCheckBox();
-            this.label2 = this.Factory.CreateRibbonLabel();
             this.Locator = this.Factory.CreateRibbonEditBox();
             this.separator3 = this.Factory.CreateRibbonSeparator();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.separator2 = this.Factory.CreateRibbonSeparator();
+            this.label1 = this.Factory.CreateRibbonLabel();
             this.PPT2Web = this.Factory.CreateRibbonButton();
             this.deleteFromWeb = this.Factory.CreateRibbonButton();
-            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.CopyToClipboard = this.Factory.CreateRibbonButton();
             this.OpenInBrowser = this.Factory.CreateRibbonButton();
-            this.separator2 = this.Factory.CreateRibbonSeparator();
             this.Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -61,7 +61,7 @@
             // group1
             // 
             this.group1.Items.Add(this.checkBox1);
-            this.group1.Items.Add(this.label2);
+            this.group1.Items.Add(this.label1);
             this.group1.Items.Add(this.Locator);
             this.group1.Items.Add(this.separator3);
             this.group1.Items.Add(this.PPT2Web);
@@ -81,22 +81,32 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.CheckBox1_Click);
             // 
-            // label2
-            // 
-            this.label2.Label = "PP2Web locator:";
-            this.label2.Name = "label2";
-            // 
             // Locator
             // 
             this.Locator.Enabled = false;
-            this.Locator.Label = "";
+            this.Locator.Label = "Locator:";
             this.Locator.Name = "Locator";
-            this.Locator.SizeString = "XXXXXXXXXXXXXXXX";
+            this.Locator.ShowLabel = false;
+            this.Locator.SizeString = "xxxxxxxxxxxxxxxxxxxxxx";
             this.Locator.Text = null;
+            this.Locator.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Locator_TextChanged);
             // 
             // separator3
             // 
             this.separator3.Name = "separator3";
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
+            // separator2
+            // 
+            this.separator2.Name = "separator2";
+            // 
+            // label1
+            // 
+            this.label1.Label = "Locator:";
+            this.label1.Name = "label1";
             // 
             // PPT2Web
             // 
@@ -117,10 +127,6 @@
             this.deleteFromWeb.ShowImage = true;
             this.deleteFromWeb.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.RemoveFromWeb_Click);
             // 
-            // separator1
-            // 
-            this.separator1.Name = "separator1";
-            // 
             // CopyToClipboard
             // 
             this.CopyToClipboard.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -140,10 +146,6 @@
             this.OpenInBrowser.Name = "OpenInBrowser";
             this.OpenInBrowser.ShowImage = true;
             this.OpenInBrowser.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenInBrowser_Click);
-            // 
-            // separator2
-            // 
-            this.separator2.Name = "separator2";
             // 
             // Settings
             // 
@@ -181,8 +183,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Settings;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator3;
-        internal Microsoft.Office.Tools.Ribbon.RibbonLabel label2;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox Locator;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel label1;
     }
 
     partial class ThisRibbonCollection

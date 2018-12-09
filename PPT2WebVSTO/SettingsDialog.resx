@@ -255,13 +255,13 @@
     <value>12, 14</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>292, 13</value>
+    <value>307, 13</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>Warning! Changing this setting might make break this add-in.</value>
+    <value>Warning! Changing these settings might make break this add-in.</value>
   </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
