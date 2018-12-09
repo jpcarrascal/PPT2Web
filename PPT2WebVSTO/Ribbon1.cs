@@ -31,7 +31,8 @@ namespace PPT2WebVSTO
             uploadURL = Properties.Settings.Default.uploadURL;
             app.AfterPresentationOpen += AfterPresentationOpenHandle;
             app.AfterNewPresentation += AfterPresentationOpenHandle;
-            app.PresentationBeforeClose += ResetControls;
+            //app.PresentationBeforeClose += ResetControls;
+            //app.PresentationClose += ResetControls;
             app.WindowActivate += SwitchWindowsHandle;
         }
 
@@ -77,16 +78,6 @@ namespace PPT2WebVSTO
                 deleteFromWeb.Enabled = false;
                 OpenInBrowser.Enabled = false;
             }
-        }
-
-        private void ResetControls(Presentation pres, ref bool cancel)
-        {
-            Locator.Text = "";
-            Locator.Enabled = false;
-            CopyToClipboard.Enabled = false;
-            deleteFromWeb.Enabled = false;
-            OpenInBrowser.Enabled = false;
-            PPT2Web.Enabled = false;
         }
 
         private void Publish2Web_Click(object sender, RibbonControlEventArgs e)
@@ -246,7 +237,8 @@ namespace PPT2WebVSTO
                             OpenInBrowser.Enabled = true;
                             PPT2Web.Enabled = true;
                             Settings.Enabled = true;
-                            pptPresentation.Saved = MsoTriState.msoFalse;
+                            if (locator == "" || locator == null)
+                                pptPresentation.Saved = MsoTriState.msoFalse;
                             try
                             {
                                 SaveDocumentProperty(pptPresentation, "PPT2Web locator", webLocator);
